@@ -1,73 +1,85 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+#include "holberton.h"
 
 /**
- * check_num - check - string there are digit
- * @str: array str
+ * _atoi - converts a string to an integer
+ * @s: string to be converted
  *
- * Return; Always 0 (Success)
+ * Return: the int converted from the string
  */
-
-int check_num(char *str)
-
+int _atoi(char *s)
 {
-/*Declaring variables*/
-unsigned int count;
+	int i, d, n, len, f, digit;
 
-count = 0;
-while (count < strlen(str)) /*count string*/
+	i = 0;
+	d = 0;
+	n = 0;
+	len = 0;
+	f = 0;
+	digit = 0;
 
-{
-if (!isdigit(str[count])) /*check if str there are digit*/
-{
-return (0);
-}
+	while (s[len] != '\0')
+		len++;
 
-count++;
-}
-return (1);
+	while (i < len && f == 0)
+	{
+		if (s[i] == '-')
+			++d;
+
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			digit = s[i] - '0';
+			if (d % 2)
+				digit = -digit;
+			n = n * 10 + digit;
+			f = 1;
+			if (s[i + 1] < '0' || s[i + 1] > '9')
+				break;
+			f = 0;
+		}
+		i++;
+	}
+
+	if (f == 0)
+		return (0);
+
+	return (n);
 }
 
 /**
- * main - Print the name of the program
- * @argc: Count arguments
- * @argv: Arguments
+ * main - adds two positive number
+ * @argc: number of arguments
+ * @argv: array of arguents
  *
- * return: Always 0 (Success)
+ * Return: 0 (Success), or 1 (Success)
  */
-
 int main(int argc, char *argv[])
-
 {
+	int sum, num, i, j, k;
 
-/*Declaring variables*/
-int count;
-int str_to_int;
-int sum = 0;
+	sum = 0;
 
-count = 1;
-while (count < argc) /*Goes through the whole array*/
-{
-if(check_num(argv[count]))
+	for (i = 1; i < argc; i++)
+	{
+		for (j = 0; argv[i][j] != '\0'; j++)
+		{
+			if (argv[i][j] > '9' || argv[i][j] < '0')
+			{
+				puts("Error");
+				return (1);
+			}
+		}
+	}
 
-{
-str_to_int = atoi(argv[count]); /*ATOI --> convert string to int*/
-sum += str_to_int;
-}
+	for (k = 1; k < argc; k++)
+	{
+		num = _atoi(argv[k]);
+		if (num >= 0)
+		{
+			sum += num;
+		}
+	}
 
-/*Condition if one of the number contains symbols that are not digits*/
-else
-{
-printf("Error\n");
-return (1);
-}
-
-count++;
-}
-
-printf("%d\n", sum); /*print sum*/
-
-return (0);
+	printf("%d\n", sum);
+	return (0);
 }
